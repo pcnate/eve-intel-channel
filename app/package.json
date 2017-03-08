@@ -1,0 +1,17 @@
+{
+  "name": "eve-intel-channel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nathan Baker",
+  "license": "MIT",
+  "devDependencies": {
+    "electron-prebuilt": "^1.4.13"
+  },
+  "dependencies": {
+    "bower": "^1.8.0"
+  }
+}

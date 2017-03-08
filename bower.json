@@ -1,0 +1,29 @@
+{
+  "name": "eve-intel-channel",
+  "description": "watch configured chat logs for eve online and notify for any systems within a specified range",
+  "main": "index.js",
+  "authors": [
+    "Nathan Baker"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "eveonline",
+    "intel"
+  ],
+  "homepage": "https://github.com/pcnate/eve-intel-channel",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-moment": "^1.0.1",
+    "angular-route": "^1.6.2",
+    "angular-indexedDB": "angularjs-indexedDB#*",
+    "bootstrap": "^3.3.7",
+    "install": "^1.0.4",
+    "bower": "*"
+  }
+}

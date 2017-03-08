@@ -1,0 +1,58 @@
+<div ng-controller="MainController as mainCtrl">
+
+  <div class="col-xs-6">
+
+    <div ng-repeat="line in mainCtrl.glob.lines | messageAge:30 | limitTo: -36 track by $index">
+      <p class="no-bottom-margin" ng-class="{ 'text-info': line.atme, 'text-danger': line.watchedSystem }">[ {{ line.date | amUtc | amDateFormat:'HH:mm:ss' }} ] {{ line.character }} > {{ line.message }}</p>
+    </div>
+
+  </div>
+
+  <div class="col-xs-2"></div>
+
+  <div class="col-xs-1">
+
+    <div class="row"><div class="col-xs-12">&nbsp;</div></div>
+
+    <div class="panel panel-default">
+
+      <div class="panel-heading">Systems</div>
+
+      <div class="list-group">
+        <div class="list-group-item" ng-repeat="system in mainCtrl.glob.watchedSystems" ng-bind="system"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-xs-3">
+
+    <div class="row"><div class="col-xs-12">&nbsp;</div></div>
+
+    <div class="panel panel-default">
+
+      <div class="panel-heading">Channel Information</div>
+
+      <div class="list-group">
+        <div class="list-group-item">Channel:       <span class="pull-right">{{ mainCtrl.glob.channelName  }}</span></div>
+        <div class="list-group-item">Channel ID:    <span class="pull-right">{{ mainCtrl.glob.channelID    }}</span></div>
+        <div class="list-group-item">Listener:      <span class="pull-right">{{ mainCtrl.glob.listener     }}</span></div>
+        <div class="list-group-item">Session Start: <span class="pull-right">{{ mainCtrl.glob.sessionStart }}</span></div>
+        <div class="list-group-item">Current File:  <span class="pull-right">{{ mainCtrl.glob.fileName     }}</span></div>
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="list-group-item">Line Number:   <span class="pull-right">{{ mainCtrl.glob.lineNumber   }}</span></div>
+          </div>
+          <div class="col-xs-6">
+            <div class="list-group-item">Lines in Mem:   <span class="pull-right">{{ mainCtrl.glob.lines.length   }}</span></div>
+          </div>
+        </div>
+        <div class="list-group-item">{{ mainCtrl.glob.motd }}</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
