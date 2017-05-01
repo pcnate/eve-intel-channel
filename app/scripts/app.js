@@ -1,6 +1,22 @@
 
 angular.module('intelApp', ['ngRoute','angularMoment','xc.indexedDB']);
 
+angular.module('intelApp').filter('unique', function() {
+  return function(collection, keyname) {
+    var output = [], keys = [];
+
+    angular.forEach(collection, function(item) {
+      var key = item[keyname];
+      if(keys.indexOf(key) === -1) {
+        keys.push(key);
+        output.push(item);
+      }
+    });
+
+    return output;
+  };
+});
+
 /**
  * @description
  */
@@ -32,10 +48,33 @@ angular.module('intelApp').controller('MainController', function( $scope, ReadFi
 /**
  * @description
  */
-angular.module('intelApp').factory('ReadFileFactory', function( moment, $log ) {
+angular.module('intelApp').factory('ReadFileFactory', function( moment ) {
 
   var service = {};
 
+  var { ipcRenderer, remote } = require('electron');
+  var main = remote.require('./main.js');
+
+  // // Send async message to main process
+  // ipcRenderer.send('async', 1);
+  //
+  // // Listen for async-reply message from main process
+  // ipcRenderer.on('async-reply', (event, arg) => {
+  //   // Print 2
+  //   console.log(arg);
+  //   // Send sync message to main process
+  //   let mainValue = ipcRenderer.sendSync('sync', 3);
+  //   // Print 4
+  //   console.log(mainValue);
+  // });
+  //
+  // // Listen for main message
+  // ipcRenderer.on('ping', (event, arg) => {
+  //   // Print 5
+  //   console.log(arg);
+  //   // Invoke method directly on main process
+  //   main.pong(6);
+  // });
 
   var availableSounds = [
     {
@@ -99,7 +138,8 @@ angular.module('intelApp').factory('ReadFileFactory', function( moment, $log ) {
     channelID: '',
     listener: '',
     sessionStart: '',
-    watchedSystems: ['TD-4XL','NBO-O0','13-49W','R-RMDH','5-AOPX','CLW-SI','SH-YZY','O7-RFZ','Z-EKCY','QZX-L9','SG-3HY','AU2V-J','D-6PKO','SY-0AM','J103217'],
+    // watchedSystems: ['TD-4XL','NBO-O0','13-49W','R-RMDH','5-AOPX','CLW-SI','SH-YZY','O7-RFZ','Z-EKCY','QZX-L9','SG-3HY','AU2V-J','D-6PKO','SY-0AM','J103217'],
+    watchedSystems: ['Q7-FZ8', 'F3-8X2','X0-6LH','N7-BIY','TTP-2B','FN0-QS','LVL-GZ','HFC-AQ', 'YPW-M4','C-J6MT','4M-QXK','78-0R6','88A-RA','8-WYQZ','8G-2FP','MJ-LGH','RERZ-L','GPLB-C','1QZ-Y9','8-OZU1','L-FM3P','0TYR-T','SHBF-V','3U-48K','ZO-4AR', 'L5-UWT','A24L-V','QTME-D','GK5Z-T','RQN-OO','4CJ-AC','67Y-NR', 'I-1QKL','EFM-C4','74-VZA','6-EQYE','JLO-Z3','03-OR2','U2-28D','5-MQQ7','LQ-OAI','PUZ-IO', 'G-QTSD','ZZ5X-M','CL-IRS','MO-I1W','SAH-AD','4LJ6-Q','EX-GBT',  'CLW-SI','SH-YZY','Z-EKCY','07-RFZ'],
   };
 
   service.returnDataObject = function() {
@@ -110,7 +150,9 @@ angular.module('intelApp').factory('ReadFileFactory', function( moment, $log ) {
 
   const logFolder = '/home/pcnate/Documents/EVE/logs/Chatlogs/';
 
-  var channels = ['The Drone Den'];
+  // var channels = ['The Drone Den'];
+  // var channels = ['CCGaming'];
+  var channels = ['Vanguard.Intel'];
   // var channels = ['Corp'];
   // var channels = ['DRONE PALS'];
 
@@ -190,11 +232,15 @@ angular.module('intelApp').factory('ReadFileFactory', function( moment, $log ) {
             watched = m['3'].indexOf( system ) > -1 ? true : watched;
           });
 
-          if( moment().diff( date, 'minutes' ) < 5 ) {
-            if( watched )
+          if( moment().diff( date, 'minutes' ) < 50 ) {
+            if( watched ) {
+              ipcRenderer.send('async', { type: 'watched', channel: channel, text: m['3'], system: null, characters: [], status: null, speaker: m['2'] });
               sounds.watchedSound.play();
-            if( atme )
+            }
+            if( atme ) {
+              ipcRenderer.send('async', { type: 'atme', channel: channel });
               sounds.myNameSound.play();
+            }
           }
 
           dataObject.lines.push({

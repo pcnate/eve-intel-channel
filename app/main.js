@@ -1,6 +1,15 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const url = require('url');
+
+
+const notifier = require('node-notifier');
+const NotificationCenter = require('node-notifier/notifiers/notificationcenter');
+const NotifySend         = require('node-notifier/notifiers/notifysend');
+const WindowsToaster     = require('node-notifier/notifiers/toaster');
+const Growl              = require('node-notifier/notifiers/growl');
+const WindowsBalloon     = require('node-notifier/notifiers/balloon');
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -8,7 +17,8 @@ let win;
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({width: 800, height: 600});
+  // win = new BrowserWindow({width: 1900, height: 1000});
+  win = new BrowserWindow({width: 1920/2, height: 1080});
 
   win.setMenu(null);
 
@@ -56,3 +66,42 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+// listen for async message from renderer process
+ipcMain.on('async', ( event, arg ) => {
+
+  if( arg && arg.type && arg.type == 'watched' ) {
+    watchedSystem( arg );
+  }
+  // console.log( arg );
+  // event.sender.send('async-reply', 2);
+});
+
+// listen for sync message from renderer process
+ipcMain.on('sync', ( event, arg ) => {
+  console.log( arg );
+  event.returnValue = 4;
+  win.webContents.send('ping', 5);
+});
+
+// exports.pong = arg => {
+//   console.log( arg );
+// };
+
+function watchedSystem( arg ) {
+  var options = {
+    title: arg.channel + ' ' + arg.type + ' system',
+    message: arg.text,
+    sound: true,
+  };
+  notifier.notify(options);
+  // new NotificationCenter ( options ).notify();
+  // new NotifySend         ( options ).notify();
+  // new WindowsToaster     ( options ).notify();
+  // new Growl              ( options ).notify();
+  // new WindowsBalloon     ( options ).notify();
+  // console.log('notification sent', arg);
+  // notify(arg.channel + ' ' + arg.type + ' system', { body: arg.text }, () => {
+  //   console.log('The notification got clicked on!');
+  // });
+}
