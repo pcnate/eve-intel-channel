@@ -148,7 +148,7 @@ angular.module('intelApp').factory('ReadFileFactory', function( moment ) {
 
   const fs = require('fs');
 
-  const logFolder = '/home/pcnate/Documents/EVE/logs/Chatlogs/';
+  const logFolder = '/media/raid5/EVE/logs/Chatlogs/';
 
   // var channels = ['The Drone Den'];
   // var channels = ['CCGaming'];
