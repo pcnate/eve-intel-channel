@@ -24,6 +24,8 @@
     "angular-indexedDB": "angularjs-indexedDB#*",
     "bootstrap": "^3.3.7",
     "install": "^1.0.4",
-    "bower": "*"
+    "bower": "*",
+    "angular-animate": "^1.6.4",
+    "angular-aria": "^1.6.4"
   }
 }
